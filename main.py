@@ -1,18 +1,19 @@
 import time
 import sys
 from helpers import *
-from secrets import *
-
-CONFIG_FILE_FOLDER = path_join(os.sep, 'etc', 'nginx', 'conf.d')
+from config import *
 
 
 def get_inet_ip():
     net_config = run_command('ifconfig', '-a')[0]
     net_config = str(net_config)
 
-    search_string = '{0}: flags='.format(CONNECTION_NAME)
+    search_string = '{0}: flags='.format(NETWORK_INTERFACE)
     connection_start = net_config.find(search_string)
-    connection_end = net_config.find(': flags=', len(search_string))
+    connection_end = net_config.find(': flags=', connection_start + len(search_string))
+
+    if connection_end == -1:
+        connection_end = len(net_config)
 
     connection_config = net_config[connection_start:connection_end]
 
@@ -24,10 +25,11 @@ def get_inet_ip():
 if __name__ == "__main__":
 
     if os.geteuid() != 0:
-        print("Please run this file as sudo!")
+        print("Please run this file as administrator!")
         sys.exit(-1)
 
     last_ip = get_inet_ip()
+    print("Now tracking inet IP address {0} in network interface {1}".format(last_ip, NETWORK_INTERFACE))
 
     try:
         while True:
@@ -35,7 +37,7 @@ if __name__ == "__main__":
 
             if current_ip != last_ip:
                 for file in CONF_FILE_NAMES:
-                    file_path = os.path.join(CONFIG_FILE_FOLDER, file)
+                    file_path = path_join(CONFIG_FILE_FOLDER, file)
 
                     file_data = None
 
