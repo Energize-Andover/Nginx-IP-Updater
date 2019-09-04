@@ -15,6 +15,14 @@ CONF_FILE_NAMES = ['virtual.conf']  # Format: ['name.conf', 'name2.conf', ... 'l
 # The name of the network interface in which your inet ip address is broadcast (e.g. 'wlan0')
 NETWORK_INTERFACE = 'wlp5s0'
 
+# Optional: Configuration of email to be sent upon IP Address Changes
+SMTP_SERVER = None
+SMTP_PORT = None  # A number, not a string
+SERVER_EMAIL = None  # The email address to send from
+SERVER_PASSWORD = None  # The password to the SERVER_EMAIL
+RECIPIENTS = None  # A list of the email addresses of the recipients of the email
+SUBJECT = None  # The subject of the email
+
 '''
   # Do NOT delete or rename any of these configuration constants. Doing so will stop the IP Updater from running.
   # BE SURE TO RUN 'git update-index --skip-worktree config.py' in the command line AFTER MAKING CHANGES TO THIS FILE FOR THE
